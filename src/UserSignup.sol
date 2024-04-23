@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {console} from "forge-std/Test.sol";
+
 contract UserSignup {
     struct User {
         uint256 id;
@@ -19,39 +21,41 @@ contract UserSignup {
     function signup(string memory name, string memory email) public {
         require(bytes(name).length > 0, "Name is required");
         require(bytes(email).length > 0, "Email is required");
+        console.log(users[msg.sender].id);
         require(users[msg.sender].id == 0, "User already signed up");
         address[3] memory arrayToUse = [address(10), address(20), address(30)];
 
         nextUserId++;
         users[msg.sender] = User(nextUserId, name, email, arrayToUse, msg.sender);
-        userIdToAddress[nextUserId] = msg.sender; // Map user id to account address
+        userIdToAddress[nextUserId] = msg.sender;
 
         emit UserSignedUp(nextUserId, name, email);
     }
 
     function getUserById(uint256 id) public view returns (address) {
-        require(id > 0 && id <= nextUserId, "Invalid user id");
+        require(users[userIdToAddress[id]].id != 0, "User doesnt exist");
         return userIdToAddress[id];
     }
 
-    function getUserByAddress(address userAddress) public view returns (uint256) {
-        require(users[userAddress].id > 0, "User does not exist");
-        return users[userAddress].id;
+    function getUserID() public view returns (uint256) {
+        return nextUserId;
     }
 
-    // function offChainComputerData(paramsOffchain){
-
-    // }
-
-    function getAllUsers() public view returns (User[] memory) {
-        User[] memory userList = new User[](nextUserId);
-        for (uint256 i = 1; i <= nextUserId; i++) {
-            userList[i - 1] = users[userIdToAddress[i]];
-        }
-        return userList;
+    function getUserByAddress(address userAddress) public view returns (User memory) {
+        return users[userAddress];
     }
 
     function getActiveGiftCardsForUser(address userAddress) public view returns (address[3] memory) {
         return users[userAddress].ActiveGiftCards;
+    }
+
+    function setUserEmail(address userAddress, string memory _email) public returns (bool) {
+        users[userAddress].email = _email;
+        return true;
+        // require(users[userAddress].email,"Email not updated");
+    }
+
+    function addActiveGiftCard(address userAddress, address _newGiftCard) public returns (bool) {
+        users[userAddress].ActiveGiftCards[2] = _newGiftCard;
     }
 }
