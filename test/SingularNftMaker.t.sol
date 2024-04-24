@@ -50,4 +50,8 @@ contract TestNFTMaker is Test {
         (bool success) = signUpContract.mintNew{value: 1 ether}(whiteListArray[0]);
         assert(success);
     }
+
+    // function invariantWhitelistRemoval() public {
+
+    // }
 }

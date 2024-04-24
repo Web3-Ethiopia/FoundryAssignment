@@ -59,9 +59,10 @@ contract SingularNFTMaker is ERC721URIStorage, Ownable {
 
     function mintNew(address nftOwner) public payable returns (bool) {
         require(approvedAddresses[nftOwner], "You have not been approved as an owner");
+
+        require(payable(owner()).send(getMintPrice(nftOwner)), "Failed to transfer required funds");
         uint256 currentTokenId = lastTokenId + 1;
         uint8 nftRarityIndex = rarityIndex[nftOwner];
-        require(payable(owner()).send(getMintPrice(nftOwner)), "Failed to transfer required funds");
         _mint(nftOwner, currentTokenId);
         _setTokenURI(currentTokenId, nftURIs[nftRarityIndex]);
         lastTokenId = currentTokenId;
@@ -69,8 +70,6 @@ contract SingularNFTMaker is ERC721URIStorage, Ownable {
         delete rarityIndex[nftOwner];
         return true;
     }
-
-    
 
     function getMintPrice(address nftOwner) public view returns (uint256) {
         return MINT_PRICE / rarityIndex[nftOwner];

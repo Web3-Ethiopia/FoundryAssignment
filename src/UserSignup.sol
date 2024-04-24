@@ -21,10 +21,9 @@ contract UserSignup {
     function signup(string memory name, string memory email) public {
         require(bytes(name).length > 0, "Name is required");
         require(bytes(email).length > 0, "Email is required");
-        console.log(users[msg.sender].id);
-        require(users[msg.sender].id == 0, "User already signed up");
+        require(users[msg.sender].id == 0 || users[msg.sender].id == 1, "User already signed up");
         address[3] memory arrayToUse = [address(10), address(20), address(30)];
-
+        // console.log(users[msg.sender].id);
         nextUserId++;
         users[msg.sender] = User(nextUserId, name, email, arrayToUse, msg.sender);
         userIdToAddress[nextUserId] = msg.sender;
