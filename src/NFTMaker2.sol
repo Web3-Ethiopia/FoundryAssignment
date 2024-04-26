@@ -9,8 +9,8 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "./packages/hooks/useRangedRarityGenerator.sol";
 
 
-contract SingularNFTMaker is ERC721URIStorage, Ownable {
-    // using rarityGen for uint8;
+contract SingularNFTMaker2 is ERC721URIStorage, Ownable {
+    using rarityGen for uint8;
 
     IERC20 public WETH = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
     address creator = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
@@ -108,14 +108,14 @@ contract SingularNFTMaker is ERC721URIStorage, Ownable {
             rarity[rarityIndex[nftOwner][rarityIndex[nftOwner].length - 1]];
     }
 
-    function generateRandgedRarityIndex(
-        address addr
-    ) private view returns (uint8) {
-        uint256 rand = (uint256(
-            keccak256(abi.encodePacked(block.timestamp, addr, block.difficulty))
-        ) + 1) % 100;
-        return uint8(rand + 1);
-    }
+    // function generateRandgedRarityIndex(
+    //     address addr
+    // ) private view returns (uint8) {
+    //     uint256 rand = (uint256(
+    //         keccak256(abi.encodePacked(block.timestamp, addr, block.difficulty))
+    //     ) + 1) % 100;
+    //     return uint8(rand + 1);
+    // }
 
     function getRarityIndex(
         uint8 _rangedIndex
@@ -129,27 +129,27 @@ contract SingularNFTMaker is ERC721URIStorage, Ownable {
         return uint8(rangedRarity.length - 1);
     }
 
-    // function whiteListAddresses(address[] memory addresses) public onlyOwner {
-    //     for (uint256 index = 0; index < addresses.length; index++) {
-    //         // require(addresses[index]!=address(0),"Invalid address");
-    //         if (addresses[index] != address(0)) {
-    //             approvedAddresses[addresses[index]] = approvedAddresses[addresses[index]] + 1;
-    //             uint8 generatedRarityIndex = getRarityIndex(rarityGen.generateRandgedRarityIndex(addresses[index]));
-    //             rarityIndex[addresses[index]].push(generatedRarityIndex);
-    //         }
-    //     }
-    // }
-
-      function whiteListAddresses2(address[] memory addresses) public onlyOwner {
+    function whiteListAddresses(address[] memory addresses) public onlyOwner {
         for (uint256 index = 0; index < addresses.length; index++) {
             // require(addresses[index]!=address(0),"Invalid address");
             if (addresses[index] != address(0)) {
                 approvedAddresses[addresses[index]] = approvedAddresses[addresses[index]] + 1;
-                uint8 generatedRarityIndex = getRarityIndex(generateRandgedRarityIndex(addresses[index]));
+                uint8 generatedRarityIndex = getRarityIndex(rarityGen.generateRandgedRarityIndex(addresses[index]));
                 rarityIndex[addresses[index]].push(generatedRarityIndex);
             }
         }
     }
+
+    //   function whiteListAddresses2(address[] memory addresses) public onlyOwner {
+    //     for (uint256 index = 0; index < addresses.length; index++) {
+    //         // require(addresses[index]!=address(0),"Invalid address");
+    //         if (addresses[index] != address(0)) {
+    //             approvedAddresses[addresses[index]] = approvedAddresses[addresses[index]] + 1;
+    //             uint8 generatedRarityIndex = getRarityIndex(generateRandgedRarityIndex(addresses[index]));
+    //             rarityIndex[addresses[index]].push(generatedRarityIndex);
+    //         }
+    //     }
+    // }
 
     function setNftPrice(uint256 price, uint256 tokenId) public returns (bool) {
         require(

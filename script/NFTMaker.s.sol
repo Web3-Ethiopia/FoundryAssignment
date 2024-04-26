@@ -1,14 +1,16 @@
 import {Script, console} from "forge-std/Script.sol";
 import {SingularNFTMaker} from "../src/NFTMaker.sol";
+import {SingularNFTMaker2} from "../src/NFTMaker2.sol";
 
 contract NFTMakerScript is Script {
     function setUp() public {}
 
     function run() public {
-        uint256 deployerPrivateKey = vm.envUint("BNB_PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envUint("ANVIL_ACCOUNT1");
 
         vm.startBroadcast(deployerPrivateKey);
         SingularNFTMaker mainContract;
+        SingularNFTMaker2 mainContract2;
         uint8[] memory rarityArray = new uint8[](7);
         rarityArray[0] = 2;
         rarityArray[1] = 8;
@@ -27,12 +29,14 @@ contract NFTMakerScript is Script {
         uriArray[5] = "xyz.com";
         uriArray[6] = "xyz.com";
 
-        mainContract = new SingularNFTMaker{value: 1000000}("M1", "M2 F9", rarityArray, uriArray);
+        mainContract = new SingularNFTMaker{value: 1 ether}("M1", "M2 F9", rarityArray, uriArray);
+        mainContract2 = new SingularNFTMaker2{value: 1 ether}("M1", "M2 F9", rarityArray, uriArray);
         address[] memory whiteListedAddresses = new address[](2);
         whiteListedAddresses[0] = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
         whiteListedAddresses[1] = 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC;
 
-        mainContract.whiteListAddresses(whiteListedAddresses);
+        mainContract.whiteListAddresses2(whiteListedAddresses);
+        mainContract2.whiteListAddresses(whiteListedAddresses);
 
         // uint256 mint_price = mainContract.getMintPrice(whiteListedAddresses[0]);
 
