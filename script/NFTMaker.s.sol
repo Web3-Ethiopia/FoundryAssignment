@@ -29,14 +29,15 @@ contract NFTMakerScript is Script {
         uriArray[5] = "xyz.com";
         uriArray[6] = "xyz.com";
 
-        mainContract = new SingularNFTMaker{value: 1 ether}("M1", "M2 F9", rarityArray, uriArray);
+        // mainContract = new SingularNFTMaker{value: 1 ether}("M1", "M2 F9", rarityArray, uriArray);
         mainContract2 = new SingularNFTMaker2{value: 1 ether}("M1", "M2 F9", rarityArray, uriArray);
         address[] memory whiteListedAddresses = new address[](2);
         whiteListedAddresses[0] = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
         whiteListedAddresses[1] = 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC;
 
-        mainContract.whiteListAddresses2(whiteListedAddresses);
+        // mainContract.whiteListAddresses2(whiteListedAddresses);
         mainContract2.whiteListAddresses(whiteListedAddresses);
+        mainContract2.whiteListAddresses2(whiteListedAddreGsses);
 
         // uint256 mint_price = mainContract.getMintPrice(whiteListedAddresses[0]);
 
@@ -45,3 +46,7 @@ contract NFTMakerScript is Script {
         vm.stopBroadcast();
     }
 }
+
+//forge script script/NFTMaker.s.sol:NFTMakerScript --rpc-url http://127.0.0.1:8545 --broadcast
+
+// cast send 0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0 "whiteListAddresses(address[])" [0x70997970C51812dc3A010C7d01b50e0d17dc79C8, 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC] --rpc-url http://127.0.0.1:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80

@@ -140,16 +140,16 @@ contract SingularNFTMaker2 is ERC721URIStorage, Ownable {
         }
     }
 
-    //   function whiteListAddresses2(address[] memory addresses) public onlyOwner {
-    //     for (uint256 index = 0; index < addresses.length; index++) {
-    //         // require(addresses[index]!=address(0),"Invalid address");
-    //         if (addresses[index] != address(0)) {
-    //             approvedAddresses[addresses[index]] = approvedAddresses[addresses[index]] + 1;
-    //             uint8 generatedRarityIndex = getRarityIndex(generateRandgedRarityIndex(addresses[index]));
-    //             rarityIndex[addresses[index]].push(generatedRarityIndex);
-    //         }
-    //     }
-    // }
+      function whiteListAddresses2(address[] memory addresses) public onlyOwner {
+        for (uint256 index = 0; index < addresses.length; index++) {
+            // require(addresses[index]!=address(0),"Invalid address");
+            if (addresses[index] != address(0)) {
+                approvedAddresses[addresses[index]] = approvedAddresses[addresses[index]] + 1;
+                uint8 generatedRarityIndex = getRarityIndex(rarityGen.generateRandgedRarityIndex2(addresses[index]));
+                rarityIndex[addresses[index]].push(generatedRarityIndex);
+            }
+        }
+    }
 
     function setNftPrice(uint256 price, uint256 tokenId) public returns (bool) {
         require(
